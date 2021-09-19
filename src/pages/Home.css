@@ -1,0 +1,8 @@
+.belts {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.belts__card {
+  margin: 0px 10px 0px 0px;
+}
