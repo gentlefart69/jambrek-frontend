@@ -8,15 +8,19 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-import AddNewBelt from "../components/AddNewBelt";
+import AddNewBeltModal from "../components/AddNewBeltModal";
+import { BASE_API_URL, ENDPOINTS } from "../constants/apiConstants";
 import "./Home.css";
 
 const Home = () => {
   const [belts, setBelts] = useState([]);
-  const [isNewBeltModalShown, setIsNewBeltModalShown] = useState(false);
+  const [isShown, setIsShown] = useState(false);
+  const [shouldUpdate, setShouldUpdate] = useState(false);
+  const [selectedBelt, setSelectedBelt] = useState(null);
 
   const fetchAllBelts = () => {
-    fetch("http://localhost:8000/api/belts")
+    const path = `${BASE_API_URL}${ENDPOINTS.BELTS.ALL}`;
+    fetch(path)
       .then((response) => response.json())
       .then((data) => setBelts(data));
   };
@@ -25,8 +29,21 @@ const Home = () => {
     fetchAllBelts();
   }, []);
 
-  const showNewBeltModal = () => {
-    setIsNewBeltModalShown(true);
+  const handleShowModal = () => {
+    setIsShown(true);
+  };
+
+  const handleCloseModal = () => {
+    setShouldUpdate(false);
+    setSelectedBelt(null);
+    setIsShown(false);
+  };
+
+  const updateBelt = (belt) => {
+    setShouldUpdate(true);
+    console.log("Setting belt:", belt);
+    setSelectedBelt(belt);
+    setIsShown(true);
   };
 
   const deleteBelt = (beltId) => {
@@ -55,6 +72,9 @@ const Home = () => {
         </CardContent>
         <CardActions>
           <Button size="small">Add to cart ({belt.price})</Button>
+          <Button onClick={() => updateBelt(belt)} size="small" variant="text">
+            Edit
+          </Button>
           <Button
             onClick={() => deleteBelt(belt.id)}
             size="small"
@@ -75,16 +95,21 @@ const Home = () => {
         {belts.length > 0 && belts.map((belt) => renderBelt(belt))}
       </div>
 
+      <AddNewBeltModal
+        isShown={isShown}
+        handleClose={handleCloseModal}
+        update={shouldUpdate}
+        selectedBelt={selectedBelt}
+      />
+
       <Fab
-        onClick={showNewBeltModal}
+        onClick={handleShowModal}
         style={{ position: "fixed", bottom: 20, right: 20 }}
         color="primary"
         aria-label="add"
       >
         <AddIcon />
       </Fab>
-
-      <AddNewBelt isShown={isNewBeltModalShown} />
     </div>
   );
 };

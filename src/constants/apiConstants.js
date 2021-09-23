@@ -5,7 +5,7 @@ export const BASE_API_URL = BASE_URL + API_URL;
 export const ENDPOINTS = {
   BELTS: {
     ALL: "/belts",
-    GET: "/belts/{belt}",
+    BELT: "/belts/{belt}",
     NEW: "/belts/new",
     DELETE: "/belts/{belt}/delete",
   },
