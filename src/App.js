@@ -2,6 +2,7 @@ import "./App.css";
 import Header from "./components/Header";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import MojaStranica from "./pages/MojaStranica";
 import {
   BrowserRouter as Router,
   Switch,
@@ -38,20 +39,23 @@ function App() {
     <Auth>
       <Router>
         <Switch>
-          <ProtectedRoute exact path="/">
+          <Route exact path="/">
             <Header />
-          </ProtectedRoute>
-          <Route path="/admin">
+          </Route>
+          <ProtectedRoute path="/admin">
             <div className="App">
               <Header />
               <Home />
             </div>
-          </Route>
+          </ProtectedRoute>
           <Route path="/login">
             <Login />
           </Route>
           <Route path="/register">
             <Register />
+          </Route>
+          <Route path="/moja-stranica">
+            <MojaStranica />
           </Route>
         </Switch>
       </Router>

@@ -42,14 +42,19 @@ const Header = () => {
             </>
           ) : null}
           {auth.currentUser ? (
-            <Button
-              onClick={() => {
-                auth.logout();
-              }}
-              color="inherit"
-            >
-              Logout ({auth.currentUser.email})
-            </Button>
+            <>
+              <Button to="/admin" component={Link} color="inherit">
+                Admin Panel
+              </Button>
+              <Button
+                onClick={() => {
+                  auth.logout();
+                }}
+                color="inherit"
+              >
+                Logout ({auth.currentUser.email})
+              </Button>
+            </>
           ) : null}
         </Toolbar>
       </AppBar>
