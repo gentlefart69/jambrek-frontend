@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { BASE_API_URL, ENDPOINTS } from "../constants/apiConstants";
 import "./AddNewBeltModal.css";
+import client from "../lib/client";
 
 const AddNewBeltModal = ({
   isShown = false,
@@ -45,7 +46,7 @@ const AddNewBeltModal = ({
     setBeltData(newData);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (update) {
       const path = `${BASE_API_URL}${ENDPOINTS.BELTS.BELT}`.replace(
         "{belt}",
@@ -57,12 +58,7 @@ const AddNewBeltModal = ({
         body: JSON.stringify({ ...beltData, id: selectedBelt.id }),
       });
     } else {
-      const path = `${BASE_API_URL}${ENDPOINTS.BELTS.NEW}`;
-      fetch(path, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(beltData),
-      });
+      await client.createBelt(beltData);
     }
 
     handleModalClose();
