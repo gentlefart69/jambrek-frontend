@@ -9,10 +9,11 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 import AddNewBeltModal from "../components/AddNewBeltModal";
-import { BASE_API_URL, ENDPOINTS } from "../constants/apiConstants";
+import { BASE_API_URL, BASE_URL, ENDPOINTS } from "../constants/apiConstants";
 import "./Home.css";
 import { useAuth } from "../components/Auth/auth";
 import client from "../lib/client";
+import { CardMedia } from "@mui/material";
 
 const Home = () => {
   const auth = useAuth();
@@ -48,21 +49,23 @@ const Home = () => {
     setIsShown(true);
   };
 
-  const deleteBelt = (beltId) => {
+  const deleteBelt = async (beltId) => {
     // Remove from state
     const oldBelts = [...belts];
     const newBelts = oldBelts.filter((belt) => belt.id !== beltId);
     setBelts(newBelts);
 
-    // Remove from backend
-    fetch(`http://localhost:8000/api/belts/${beltId}/delete`, {
-      method: "DELETE",
-    });
+    await client.deleteBelt(beltId);
   };
 
   const renderBelt = (belt) => {
     return (
       <Card key={belt.id} className="belts__card" sx={{ minWidth: 275 }}>
+        <CardMedia
+          component="img"
+          height="140"
+          image={`${BASE_URL}/storage/${belt.image}`}
+        />
         <CardContent>
           <Typography variant="h5" component="div">
             {belt.name}

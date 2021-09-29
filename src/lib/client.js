@@ -14,8 +14,26 @@ class APIClient {
     return response.data;
   }
 
+  async deleteBelt(beltId) {
+    return await this.instance.delete(`/api/belts/${beltId}/delete`);
+  }
+
   async createBelt(data) {
-    return await this.instance.post("/api/belts/new", data);
+    const fd = new FormData();
+
+    Object.keys(data).forEach((key) => {
+      console.log(data[key]);
+      fd.append(key, data[key]);
+    });
+
+    return await this.instance({
+      baseURL: BASE_URL,
+      withCredentials: true,
+      method: "post",
+      url: "/api/belts/new",
+      data: fd,
+      headers: { "Content-Type": "multipart/form-data" },
+    });
   }
 
   async login({ email, password }) {

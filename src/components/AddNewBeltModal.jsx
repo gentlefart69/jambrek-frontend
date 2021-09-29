@@ -36,13 +36,20 @@ const AddNewBeltModal = ({
       color: "",
       type: "",
       price: "",
+      image: null,
     });
     handleClose();
   };
 
   const handleBeltData = (field, value) => {
     const newData = { ...beltData };
-    newData[field] = value;
+
+    if (field === "image") {
+      newData[field] = value[0];
+    } else {
+      newData[field] = value;
+    }
+
     setBeltData(newData);
   };
 
@@ -121,6 +128,11 @@ const AddNewBeltModal = ({
           placeholder="Price"
           value={beltData.price}
           onChange={(event) => handleBeltData("price", event.target.value)}
+        />
+        <Input
+          className="input-field"
+          type="file"
+          onChange={(event) => handleBeltData("image", event.target.files)}
         />
 
         <Button onClick={handleSubmit}>Submit</Button>
