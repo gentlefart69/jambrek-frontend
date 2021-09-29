@@ -5,6 +5,7 @@ const AuthContext = React.createContext({
   currentUser: null,
   setUser: () => {},
   logout: () => {},
+  loading: true,
 });
 
 export function useAuth() {
@@ -14,11 +15,13 @@ export function useAuth() {
 
 export function Auth({ children }) {
   const [currentUser, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (localStorage.getItem("userObj")) {
       const item = localStorage.getItem("userObj");
       setUser(JSON.parse(item));
+      setLoading(false);
     }
   }, []);
 
@@ -31,7 +34,6 @@ export function Auth({ children }) {
   }
 
   async function handleLogout() {
-    console.log("logging out!");
     await client.logout();
     localStorage.removeItem("userObj");
     setUser(null);
@@ -39,7 +41,12 @@ export function Auth({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ currentUser, setUser: handleSetUser, logout: handleLogout }}
+      value={{
+        currentUser,
+        setUser: handleSetUser,
+        logout: handleLogout,
+        loading,
+      }}
     >
       {children}
     </AuthContext.Provider>

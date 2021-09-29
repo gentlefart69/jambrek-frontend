@@ -15,6 +15,10 @@ import Register from "./pages/Register";
 function ProtectedRoute({ children, rest }) {
   const auth = useAuth();
 
+  if (auth.loading) {
+    return <h1>Loading user...</h1>;
+  }
+
   return (
     <Route
       {...rest}
